@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: 'The blog',
     description: 'My blog where I share updates and posts I write where I keep your in the loop of what goes in my life and the tech world from my window',
     openGraph: {
-        images: '/yosefa.webp'
+        images: '/meta-image.webp'
     }
 }
 
