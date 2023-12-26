@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Outfit } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react';
 import './globals.css'
 import { Header } from '@/app/components/Header'
 import { Footer } from '@/app/components/Footer'
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={`${inter.variable} ${outfit.variable} bg-white-light`}>
         <Header />
         {children}
+        <Analytics />
         <div className="mt-24">
           <Footer />
         </div>
