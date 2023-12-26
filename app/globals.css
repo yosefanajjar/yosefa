@@ -2,6 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  .heading-1 {
+    @apply font-primary text-4xl xl:text-5xl font-medium text-black;
+  }
+
+  .heading-2 {
+    @apply font-primary text-2xl xl:text-4xl font-medium text-white;
+  }
+
+  .heading-3 {
+    @apply font-primary text-black text-2xl xl:text-4xl font-semibold leading-[38px];
+  }
+
+  .sub-heading-1 {
+    @apply font-primary text-2xl text-black;
+  }
+
+  .description-1 {
+    @apply font-secondary text-black text-base;
+  }
+
+  .button-text {
+    @apply font-secondary text-center text-2xl font-medium;
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -17,11 +43,5 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: black;
 }
