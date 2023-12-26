@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { ImageFrame } from "../ImageFrame";
-import { Tag } from "../Tag";
-import { Button } from "../Button";
+import { ImageFrame } from "@/app/components/ImageFrame";
+import { Tag } from "@/app/components/Tag";
+import { Button } from "@/app/components/Button";
 
 interface PostCardProps {
     title: string;

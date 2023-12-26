@@ -1,0 +1,165 @@
+---
+title: Improve your team’s code review process and maintain code quality
+date: 2023-08-30
+description:
+  A guide on how to improve your team's code review process and find the perfect
+  flow with some actions to help you get to a better code review process while
+  maintaining code quality
+imagePath: /images/improve-your-team-code-review-process/hero.webp
+tags: Guide, Code Review, Code Quality, Team Building Tech Quality, Management
+---
+
+## **Introduction**
+
+The code review part of the development pipeline is such a vital part to make
+sure that you're pushing clean code the team aligns with and prevent possible
+defects that the developer might have missed while writing the code. It's also
+the best way to contribute to the learning of the team members. If you don't do
+code reviews, there is a good chance that you're pushing potential bugs to
+production, and that your codebase will be hard to maintain at some point.
+
+> “The only way to make the deadline — the only way to go fast — is to keep the
+> code as clean as possible at all times.” _by Robert C. Martin from the book
+> Clean Code_
+
+## **The Problem**
+
+We had a problem with the length of our code reviews lead time in my previous
+team and that triggered the alarm for problem solving. You might think that the
+team needs to just write better code and that will fix the problem, it’s that
+easy! Unfortunately that’s not an easy metric to track as it’s not detailed
+enough so we had to dig deeper to discover the root causes of this problem.
+
+We went over sample pull requests (around 8) of which had a large number of
+comments and started categorising the comments types to see what are the areas
+we need improve on
+
+![An example of a team member average comments categories](/images/improve-your-team-code-review-process/Comments_Categories.png)
+
+An example of a team member average comments categories
+
+We had an average of 26 comments per pull request and set a target goal of
+reducing the number of comments by 50% and that is 13 comments per pull request.
+The reason for reducing the number of comments is that the bigger the number of
+comments is the more likely for the code review process to take longer.
+
+We're not setting a target of no comments at all though and that’s because the
+comments are valuable, we didn't want to discourage the team from providing
+feedback on code, point out possible defects, ask questions or even giving
+praise on quality code.
+
+![Number of comments per PR.png](/images/improve-your-team-code-review-process/Number_of_comments_per_PR.png)
+
+Based on the results of the investigation above we chose to use the 6-step
+Kaizen method to guide us in this initiative. The idea being to apply the
+scientific method: measure, experiment and iterate!
+
+## **The Actions**
+
+We came up with a list of actions which we have started experimenting with and
+eventually integrate with our flow
+
+### 1. Self CR
+
+While this one seems like simple action, it had proven to be effective.
+Basically having another look at your code in the pull request putting yourself
+in the code reviewer shoes (or another developer's shoes) and highlight the
+areas where you can do some improvement and then updating the code before asking
+another developer for a code review. For more on how you can do code reviews and
+what to look for watch [this](https://youtu.be/fiOaS0o9yz8) talk by Chloé Caron
+
+### 2. Train your team
+
+As we discovered during the investigation phase, we had specific
+areas/categories we can improve on as a team. We started training the team in
+these areas, we had training sessions and workshops around testing, refactoring
+strategies and advanced AWS topics which helped the whole team better understand
+the tools we’re working with and fill knowledge gabs especially around tech
+quality
+
+### 3. Pair on resolving comments
+
+This action helped us reduce the number of code review rounds we used to have,
+when working on comments suggestions alone and responding to the comments then
+re-requesting a code review, you open up a chance for more rounds of code
+reviews while it would take less time to get on a call with the reviewer and go
+through resolving the comments together.
+
+This doesn’t only reduce the time developers spend on resolving the comments but
+helps with sharing any missing knowledge that any of the developers
+writing/reviewing the code might have had!
+
+### 4. Explain the why(s)
+
+This action touches on the last point of the previous action above, which is on
+the importance of sharing knowledge. Explaining the why behind a requested
+change on the reviewer side helps the other developer better understand why
+they’ve been requested to make a specific change thus not getting the same type
+of comment on their pull request again.
+
+So to sum up the benefits of this action are: it helps with filling knowledge
+gaps and reduces the number of comments in the same category
+
+### 5. Agree on refactoring strategies
+
+We’ve noticed with pull requests where we have refactoring work we usually have
+a high number of comments and that the pull request stays in the code review
+state for longer. After a discussion with the team we found that one of the
+reasons this happens is because a developer goes through a path of refactor then
+we realize that this could have been done in better way.
+
+To not end up repeating ourselves or re-doing any refactoring work because it
+usually takes a lot of time & effort. We came up with a strategy for handling
+refactors which is to try out the refactoring strategy in mind and see if it
+takes more than 15-30 minutes then discuss the refactoring strategy with another
+developer on the team and see if it’s the right path or if we could go down a
+better route.
+
+## **The Code Review Flow**
+
+Finally, we revised our code review flow! After experimenting with different
+actions and making small adjustments along the way, I feel that we came up with
+a great flow for our code review process that managed to fix our initial problem
+with the code reviews lead time.
+
+The first part of the updated flow mostly relies on the developer asking for a
+code review to do an initial test of their code and make sure it works as
+expected then doing the first action we discussed earlier of self code review,
+and check if there are any improvements that could be made then making changes
+to the pull request and after that asking for a code review.
+
+The second part of the flow relies on both the developer and the reviewer
+working together to get the pull request through, that’s done by the reviewer
+adding whys to the comments and then pairing with the developer on resolving the
+comments. After getting an approval for the pull request we recommend doing a
+final test to make sure the code still works as expected before merging into the
+development/release branch.
+
+![Code Review Flow (After).png](</images/improve-your-team-code-review-process/Code_Review_Flow_(After).png>)
+
+This code review flow might seem a bit too much at first sight but after
+implementing this flow and repeating it for a few times our team started doing
+these actions autonomously and our code review process felt much easier to go
+through than before, helping us reduce the lead time!
+
+## **Conclusion**
+
+You should never take code reviews for granted in your development pipeline
+because of how beneficial it is for the team and the project as a whole. The
+code review process helps us maintain the code quality of the codebase and most
+importantly fill the knowledge gaps that the developers on the team might have.
+
+In the end, if you are frustrated by how long your code stays in code review:
+try to identify where the waste is! Start by looking for any re-work or
+inefficiencies and then try things to remove them!
+
+![The progress our team made in reducing number of comments thus reducing the lead time of the code review process](</images/improve-your-team-code-review-process/Comments_and_Target_(2).png>)
+
+The progress our team made in reducing number of comments thus reducing the lead
+time of the code review process
+
+### Resources
+
+- [Code Review GPT](https://github.com/mattzcarey/code-review-gpt): AI powered
+  code reviews to speed up development and reduce bugs in production. Check it
+  out!!

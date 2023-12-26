@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Button } from "./components/Button";
-import { Tag } from "./components/Tag";
-import { experiencesList } from "./constants/experiencesList";
+import { Button } from "@/app/components/Button";
+import { Tag } from "@/app/components/Tag";
+import { experiencesList } from "@/app/constants/experiencesList";
 
 export const MyJourney = () => (
     <div className="mt-20">

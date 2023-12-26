@@ -1,6 +1,6 @@
 import Link from "next/link"
 import Image from 'next/image'
-import { CloseIcon } from "../Icons/Close"
+import { CloseIcon } from "@/app/components/Icons/Close"
 
 interface MenuProps {
     onClose: () => void;

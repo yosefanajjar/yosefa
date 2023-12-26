@@ -1,7 +1,7 @@
 "use client"
 
-import { Button } from "../Button";
-import { Input } from "../Input";
+import { Button } from "@/app/components/Button";
+import { Input } from "@/app/components/Input";
 
 export const NewsLetter = () => (
     <div>

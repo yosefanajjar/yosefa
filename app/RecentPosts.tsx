@@ -1,5 +1,5 @@
-import { PostCard } from "./components/PostCard";
-import { getBlog } from "./lib/getBlog";
+import { PostCard } from "@/app/components/PostCard";
+import { getBlog } from "@/app/lib/getBlog";
 
 export const RecentPosts = () => {
     const blog = getBlog().slice(0, 3);

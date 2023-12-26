@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from 'next/image'
 import { Switch } from "@/app/components/Switch"
 import { useState } from "react"
-import { Menu } from "../Menu"
+import { Menu } from "@/app/components/Menu"
 
 export const Header = () => {
     const [isOpen, setIsOpen] = useState(false);

@@ -1,0 +1,629 @@
+---
+title: Building A Design System In React
+date: 2020-09-03
+description:
+  How to build a design system in React. In This blog post I go through
+  implementing a design system from a Figma design in code with React and Styled
+  Components. You can apply the same steps with other technologies
+imagePath: /images/building-a-design-system/hero.webp
+tags: React, CSS, Design, Front-End
+---
+
+**Design systems** are used in a popular way to define the style guide and the
+components that form applications, I am not a designer so I don’t feel I will
+explain what a design system is in the best possible way so if you wish to know
+more
+[visit](https://uxdesign.cc/everything-you-need-to-know-about-design-systems-54b109851969)
+this article. The bottom of the line is that they are helpful for the team to
+understand and develop the application and more importantly to have a more
+consistent UI in both the design and code.
+
+In this guide, I am going to be using a pre-made design system template from the
+Figma community
+[click here](https://www.figma.com/community/file/867135839870202854) to view.
+The image below is the style guide for our simple design system that we will be
+implementing in code later.
+
+![Design System In Figma](/images/building-a-design-system/figma.png)
+
+## ⚡Let's write some code!
+
+So let's just get right into it, what we are going to do is setting up a style
+guide in code for the team to follow when they are building UIs and components.
+We will be building/implementing the design system in code using **React**,
+**Styled Components**, and **Styled System**.
+
+By now I assume you already have a React app ready to work with if not create a
+new react app and call it whatever name you like.
+
+```bash
+npx create-react-app react-design-system
+```
+
+### Installing Our Tools
+
+We need to install styled-components and styled-system:
+
+**[Styled Components](https://styled-components.com/)**: is a CSS in JS solution
+and personally my favorite way of writing CSS
+
+**[Styled System](https://styled-system.com/)**: is a collection of utility
+functions that add style props to your React components and allows you to
+control styles based on a global theme object with typographic scales, colors,
+and layout properties. And it works with both Styled Components + EmotionJS.
+
+```bash
+yarn add styled-components styled-system
+```
+
+### Setting Up Our Theme:
+
+In this first step, we are going to set up the global theme for our app from the
+Figma design system, our theme consists of colors, fonts and their sizes,
+spacing, and breakpoints (for responsive design). I'm going to be setting up
+those right from the Figma template so use it as a reference and I will try to
+mention where you can find each section wherever I can.
+
+Basically, we are going to create a global theme object that can be easily used
+in other places.
+
+**Adding colors**:
+
+Figma reference: style guide page ⇒ color scheme frame.
+
+```jsx
+export default {
+  colors: {
+    primary: '#ED4B9E',
+    secondary: '#4B4DED',
+    tertiary: '#F3D9DA',
+    dark: '#0E0E2C',
+    success: '#31D0AA',
+    text: '#4A4A68',
+    subtleText: '#8C8CA1',
+    accent: '#ECF1F4',
+    light: '#FAFCFE',
+    white: '#FFFFFF',
+  },
+}
+```
+
+It's very simple just adding a colors object to our theme where the color name
+is the key and the value is the hex color value and now we have added all of our
+colors.
+
+**Adding font sizes**:
+
+Figma reference: style guide page ⇒ type scale frame.
+
+Simply we need to add all the font sizes that are used in the Figma and there
+are multiple ways of doing it, but here is what we will do, following the styled
+system's [theme specification](https://styled-system.com/theme-specification) we
+will create an array that contains all the sizes from the smallest to the
+largest and then we are gonna add properties to that array and I will explain
+why later, just keep it in mind for now:
+
+```jsx
+const fontSizes = ['10px', '12px', '14px', '16px', '24px', '40px', '64px']
+
+fontSizes.extraSmall = fontSizes[0]
+fontSizes.smaller = fontSizes[1]
+fontSizes.small = fontSizes[2]
+fontSizes.medium = fontSizes[3]
+fontSizes.large = fontSizes[4]
+fontSizes.larger = fontSizes[5]
+fontSizes.extraLarge = fontSizes[6]
+```
+
+We can add the `fontSizes` object to our theme. but before let's also handle the
+spacing and breakpoints in the same way.
+
+```jsx
+const breakpoints = ['600px', '900px', '1200px', '1800px']
+
+breakpoints.sm = breakpoints[0]
+breakpoints.md = breakpoints[1]
+breakpoints.lg = breakpoints[2]
+breakpoints.xl = breakpoints[3]
+
+const spaces = ['4px', '8px', '16px', '32px', '48px', '56px']
+
+spaces.smaller = spaces[0]
+spaces.small = spaces[1]
+spaces.medium = spaces[2]
+spaces.large = spaces[3]
+spaces.larger = spaces[4]
+spaces.extraLarge = spaces[5]
+```
+
+Now! let's add them all to our theme object and we should have an exported
+object that looks like this:
+
+```jsx
+export default {
+  colors: {
+    primary: '#ED4B9E',
+    secondary: '#4B4DED',
+    tertiary: '#F3D9DA',
+    dark: '#0E0E2C',
+    success: '#31D0AA',
+    text: '#4A4A68',
+    subtleText: '#8C8CA1',
+    accent: '#ECF1F4',
+    light: '#FAFCFE',
+    white: '#FFFFFF',
+  },
+  fontSizes,
+  breakpoints,
+  spaces,
+}
+```
+
+And it has all of what we need to start developing our UI but first, we need to
+learn how to use it so let's do that in the next step.
+
+### Using the theme:
+
+In the `app.js` file import `ThemeProvider` from styled-components and import
+our `theme` object that we've just created.
+
+```jsx
+import { ThemeProvider } from 'styled-components'
+
+import theme from './utils/theme'
+```
+
+Then let's wrap our app component's children with that `ThemeProvider`, and that
+doesn't mean now we are using our theme yet but it means our theme is available
+for our components to use and will explain next how we can use this theme in
+multiple ways using both styled-components and styled system.
+
+```jsx
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <div>Hello World</div>
+    </ThemeProvider>
+  )
+}
+```
+
+There are different ways of accessing this theme's values but I will mention the
+two ways I am using in this guide:
+
+**In styled components:** we can access the theme values using the props
+function
+
+```jsx
+const Component = styled.div`
+  color: ${props => props.theme.colors.dark};
+`
+```
+
+**In styled system:** as we are using it to add utility functions that add style
+props to our component, it will also be using our theme so that we can pass
+theme values directly to those props. I know this may seem a bit confusing but I
+hope the following example illustrates what I was trying to explain.
+
+```jsx
+import { color } from 'styled-system';
+
+const Component = styled.div`
+	${color};
+`
+<Component color="dark" />
+```
+
+the `dark` color will be fetched from our theme and if there is no such color
+then it will fall back to the original CSS value of that color.
+
+If you wish to learn more on the `ThemeProvier` check the styled-components docs
+[here](https://styled-components.com/docs/api#themeprovider).
+
+### Creating the layout:
+
+The general layout component is also in the Figma which explains how the content
+is displayed in pages but ours is just simple, it's only defining the padding on
+the sides.
+
+On desktop we need a padding of `32px` (`spaces[3]` or `spaces.large` from our
+theme) on the sides and on mobile, we need only `16px` (`spaces[2]` or
+`spaces.medium` from our theme). Here is how we will do it:
+
+Creating a `Wrapper` component with _styled-components_ and then add the `space`
+utilities to it from _styled-system_ which will allow us to use the `padding` or
+`p` prop and even more for this Wrapper component.
+
+```jsx
+import { space } from 'styled-system'
+
+const Wrapper = styled.div`
+  ${space};
+`
+```
+
+Then we will create our layout component that will receive children and wrap it
+in our `Wrapper` component and to achieve the layout we need we can do in
+different ways, _Styled System_ offers a convenient shorthand syntax for writing
+responsive styles with a mobile-first approach and there are two ways to do it
+which is using **Arrays** or using **Objects**.
+
+My favorite and I think is easier is by **Using Objects**:
+
+it works by passing an object to the prop that contains each breakpoint as a key
+and the value for that breakpoint as a number, and both of these values will be
+resolved from our theme but let's take a look at the code first after I will
+explain in more detail.
+
+```jsx
+export const Layout = ({ children }) => {
+  return (
+    <Wrapper padding={{ default: 3, sm: 4 }}>
+      <main>{children}</main>
+    </Wrapper>
+  )
+}
+```
+
+In our Layout component we are using the object syntax and let's break it down,
+as I said it's a mobile-first approach so:
+
+- The `default` property is going to be the starting point and the value it
+  takes is `3` which resolves to the value of `16px` from our theme.
+
+**Side Note**: the number `3` is not the index of the value in the array, think
+of it as the `index + 1` of that value
+
+- The `sm` property is our first breakpoint `600px` and its value is `2` which
+  resolves to `32px` and this means starting from the width of 600px use 32px of
+  padding exactly like this media query `media (min-width: 600px)`
+
+If you wish to know more on responsive design using styled-system check the docs
+[here](https://styled-system.com/responsive-styles)
+
+**Adding Fonts**
+
+We need to add our fonts that we are using in the Figma, the way I like to do it
+is by downloading the fonts and then adding them to our `fonts` folder so let's
+do that first:
+
+```jsx
+--/fonts
+	|-- WorkSans-Bold.ttf
+  |-- WorkSans-Medium.ttf
+```
+
+Then we will need to add these fonts to our app so that we can actually use
+them. Create an `index.js` file in the same fonts directory above and import the
+`createGlobalStyle` function from styled-components also don't forget to import
+your fonts.
+
+```jsx
+import { createGlobalStyle } from 'styled-components'
+
+import WorkSansMediumTTF from './WorkSans-Medium.ttf'
+import WorkSansBoldTTF from './WorkSans-Bold.ttf'
+```
+
+Next, is to add the font-face for these fonts and exporting the component,
+notice that we are using the same font but it has different weights, in other
+cases it might two completely different fonts.
+
+```jsx
+export default createGlobalStyle`
+    @font-face {
+        font-family: 'Work Sans';
+        src: local('Work Sans'), local('WorkSans'),
+        url(${WorkSansMediumTTF}) format('ttf'),
+        url(${WorkSansMediumTTF}) format('ttf');
+        font-weight: 500;
+        font-style: normal;
+    }
+    @font-face {
+        font-family: 'Work Sans';
+        src: local('Work Sans'), local('WorkSans'),
+        url(${WorkSansBoldTTF}) format('ttf'),
+        url(${WorkSansBoldTTF}) format('ttf');
+        font-weight: 700;
+        font-style: normal;
+    }
+`
+```
+
+Now we can import this component and add it to our layout so that we are able to
+use these fonts for our text but before let's also create a global styles
+component to reset some CSS rules as it's kind of done in a similar way.
+
+```jsx
+import { createGlobalStyle } from 'styled-components'
+
+export default createGlobalStyle`
+ *, :before, :after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html {
+    font-size: 10px;
+  }
+
+  body {
+    background: ${props => props.theme.colors.white};
+    color: ${props => props.theme.colors.text};
+    font-family: 'Work Sans, sans-serif';
+    max-width: 100%;
+  }
+`
+```
+
+Finally, let's import those two components and add them to our layout
+
+```jsx
+import GlobalFonts from '../fonts'
+import GlobalStyles from '../utils/GlobalStyles'
+
+export const Layout = ({ children }) => {
+  return (
+    <Wrapper padding={{ default: 3, sm: 2, lg: 1 }}>
+      <GlobalStyles />
+      <GlobalFonts />
+      <main>{children}</main>
+    </Wrapper>
+  )
+}
+```
+
+### Building Components:
+
+We will not build a whole component library but I am going to build some
+components like typography components and one button just to give you a basic
+idea of what you can do by combining _styled-components_ and _styled-system_
+together.
+
+### **Headings**
+
+I like creating headings in the following way and as you can see we are using
+the font sizes from our theme, also we are adding the color and space utilities
+to be able to change colors or add paddings and margins easily
+
+```jsx
+import { color, space } from 'styled-system'
+
+export const H1 = styled.h1`
+  font-size: ${props => props.theme.fontSizes.extraLarge};
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  ${color};
+  ${space};
+`
+
+export const H2 = styled.h2`
+  font-size: ${props => props.theme.fontSizes.larger};
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  ${color};
+  ${space};
+`
+
+export const H3 = styled.h3`
+  font-size: ${props => props.theme.fontSizes.large};
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  ${color};
+  ${space};
+`
+
+export const Subtitle = styled.h4`
+  font-size: ${props => props.theme.fontSizes.large};
+  font-weight: 500;
+  ${color};
+  ${space};
+`
+```
+
+Using the components after is fairly simple I am adding a margin bottom here
+just to separate them or display them in a better way and also to give you an
+idea of what props you can use with those components.
+
+```jsx
+<H1 mb={2} color="dark">
+  Hello World
+</H1>
+<H2 mb={2} color="dark">
+  Hello World
+</H2>
+<H3 mb={2} color="dark">
+	Hello World
+</H3>
+<Subtitle mb={2} color="dark">
+  Hello World
+</Subtitle>
+```
+
+![Headings Components](/images/building-a-design-system/headings.png)
+
+### **Text:**
+
+If you take a look at the Figma (style guide page ⇒ type scale frame). We have
+three ways of displaying paragraphs we will manage to merge those three
+components in one and here is how:
+
+let's add all of the utilities for the properties that change, most of it is
+typography related but I will also add the color and space utilities too!
+
+```jsx
+export const Text = styled.p`
+  ${typography};
+  ${color};
+  ${space};
+`
+```
+
+By using the right props and giving them the right values from our theme (for
+example `fontSize="medium"` will resolve to `16px` from our theme) we are able
+to represent all of our paragraphs using one component like so:
+
+```jsx
+<Text mb={2} fontSize="medium" fontWeight={500} lineHeight="140%">
+  Lorem Ipsum is simply dummy text of the printing and typesetting
+  industry. Lorem Ipsum has been the industry's standard dummy
+</Text>
+<Text mb={2} fontSize="medium" fontWeight={700} lineHeight="140%">
+  Lorem Ipsum is simply dummy text of the printing and typesetting
+  industry. Lorem Ipsum has been the industry's standard dummy
+</Text>
+<Text mb={2} fontSize="small" fontWeight={500} lineHeight="140%">
+  Lorem Ipsum is simply dummy text of the printing and typesetting
+  industry. Lorem Ipsum has been the industry's standard dummy
+</Text>
+```
+
+![Typography Components](/images/building-a-design-system/typography.png)
+
+### **Others**
+
+The other typography components are stuff like `PreTitle` and `Link` and for
+those I use a `<span>` element for you can also combine the two in one if you
+want but I like having them this way
+
+```jsx
+export const PreTitle = styled.span`
+  font-weight: 700;
+  font-size: ${props => props.theme.fontSizes.extraSmall};
+  text-transform: uppercase;
+  color: ${theme.colors.text};
+  letter-spacing: 0.03em;
+  display: inline-block;
+  ${space};
+`
+
+export const LinkText = styled.span`
+  font-weight: 700;
+  font-size: ${props => props.theme.fontSizes.medium};
+  text-decoration: underline;
+  color: ${props => props.theme.colors.secondary};
+  letter-spacing: 0.03em;
+  display: inline-block;
+  ${space};
+`
+```
+
+```jsx
+<PreTitle mr={2}>Pre Title</PreTitle>
+<LinkText ml={2}>Link Text</LinkText>
+```
+
+**Note**: I have not created a button text component and instead I will set
+those rules next when building the `Button` component
+
+### **Buttons**
+
+When creating a button there is so much to think about like hover effects,
+outline, sizes, and more for keeping it simple we will just handle the text of
+the button and we will also introduce **variants**
+
+First, let's add the styles for the button's text by following the Figma guide
+and when done it should look like this:
+
+```jsx
+import styled from 'styled-components'
+
+export const Button = styled.button`
+  padding: ${props =>
+    `${props.theme.spaces.small} ${props.theme.spaces.medium}`};
+  border-radius: 8px;
+  font-family: 'Work Sans', sans-serif;
+  font-weight: 700;
+  font-size: ${props => props.theme.fontSizes.medium};
+  text-transform: uppercase;
+  color: ${props => props.theme.colors.dark};
+  letter-spacing: 0.03em;
+  display: inline-block;
+`
+```
+
+Next, is styling the look of our button and if you take a look at the Figma
+design in the components page ⇒ forms frame, we have three or four buttons but
+what we will not create three or four separate buttons in our code, nor that we
+will use lots of props and conditions as that is going to be a bit of a hassle.
+
+We will use one feature from _Styled System_ that is called
+[variants](https://styled-system.com/variants) I am sure you know what the term
+variant means especially with buttons, what styled system variants allow us to
+do is to apply complex styles to a component using a single prop.
+
+For example, we have three buttons one is primary, one is secondary and a
+tertiary one, we will pass one of these to our `variant` prop, and based on that
+we will render the right styles.
+
+```jsx
+import { variant } from "styled-system";
+
+export const Button = styled.button`
+	....
+	${variant({
+	    variants: {
+	      primary: {
+	        color: "white",
+	        bg: "secondary",
+	        border: "none",
+	        boxShadow:
+	          "0px 6px 2px -4px rgba(14, 14, 44, 0.1), inset 0px -1px 0px rgba(14, 14, 44, 0.4)",
+	      },
+	      secondary: {
+	        color: "secondary",
+	        bg: "accent",
+	        border: "none",
+	        boxShadow: "inset 0px -1px 0.5px rgba(14, 14, 44, 0.4)",
+	      },
+	      tertiary: {
+	        color: "secondary",
+	        bg: "white",
+	        border: `1px solid #ECF1F4`,
+	      },
+	    },
+  })};
+```
+
+We start by importing the `variant` function from styled-system and pass our
+variants to it by adding the property name then defining styles for it.
+
+**Note**: When defining variants inline, you can use _Styled System_ like syntax
+to pick up values from your theme.
+
+And now we are able to use the variant prop in our `Button` component.
+
+```jsx
+<Button variant="primary" onClick={() => console.log("clicked!😀")}>
+  Button
+</Button>
+<Button variant="secondary" onClick={() => console.log("clicked!😀")}>
+  Button
+</Button>
+<Button variant="tertiary" onClick={() => console.log("clicked!😀")}>
+  Button
+</Button>
+```
+
+![Buttons Components](/images/building-a-design-system/buttons.png)
+
+### Conclusion:
+
+- Design systems are used in almost every app and are crucial for having a
+  consistent front end
+- There are many ways of how to approach a design system in code
+- Styled Components along with Styled System are powerful and friendly tools to
+  build design systems
+
+This was a basic guide to get you started with building design systems and there
+is more stuff that could be discovered so I encourage you to search more about
+tools that can help you and your team, one tool I would recommend is
+**[Storybook](https://storybook.js.org/)** it is such a great way to display and
+document your components and really helpful if you are working with a designer
+so check it out. In the end, I hope you've learned a few things from this guide
+and are able to write some code in a better way than before, thanks for reading
+my article.
+
+The final code of the guide can be found
+[here](https://github.com/yosefanajjar/react-design-system) on Github

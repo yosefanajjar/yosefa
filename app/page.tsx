@@ -1,11 +1,12 @@
 import Image from "next/image"
-import { Header } from "./components/Header"
-import { ImageFrame } from "./components/ImageFrame"
-import { Button } from "./components/Button"
-import { Tag } from "./components/Tag"
-import { RecentPosts } from "./RecentPosts"
-import { MyJourney } from "./MyJourney"
-import { NewsLetter } from "./components/NewsLetter"
+import { Header } from "@/app/components/Header"
+import { ImageFrame } from "@/app/components/ImageFrame"
+import { Button } from "@/app/components/Button"
+import { tagsList } from "@/app/constants/tagsList"
+import { Tag } from "@/app/components/Tag"
+import { RecentPosts } from "@/app/RecentPosts"
+import { MyJourney } from "@/app/MyJourney"
+import { NewsLetter } from "@/app/components/NewsLetter"
 
 export default function Home() {
   return (
@@ -29,11 +30,11 @@ export default function Home() {
               <p className="sub-heading-1">Cloud Developer</p>
             </div>
             <p className="sub-heading-1 mt-4">📍London, UK 🇬🇧</p>
-            <div className="mt-10 flex xl:justify-start justify-center">
+            {/* <div className="mt-10 flex xl:justify-start justify-center">
               <Button variant="primary" href='/about'>
                 {'About Me ->'}
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="w-full mt-10 xl:mt-0 lg:w-3/6 xl:w-5/12 bg-purple-light rounded-[5px] border-4 border-black py-6 px-3 xl:p-10">
