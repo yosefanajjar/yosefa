@@ -11,7 +11,7 @@ export const Tag = ({ children, variant, size = 'regular', className }: TagProps
 
     return (
         <div className={`${sizeClasses} ${variantClasses}  md:px-5 flex items-center justify-center relative ${className}`}>
-            <p className={`text-center ${size === 'large' ? 'text-3xl xl:text-4xl' : 'text-xs'} text-black font-primary`}>{children}</p>
+            <p className={`text-center ${size === 'large' ? 'text-3xl xl:text-4xl' : 'text-xs'} font-primary`}>{children}</p>
             {size === 'large' ? (
                 <div className="w-full h-[98.16px] absolute top-3 left-1 bg-black rounded-2xl border border-black -z-10" />
             ) : null}

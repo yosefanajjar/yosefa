@@ -4,7 +4,7 @@
 
 @layer components {
   .heading-1 {
-    @apply font-primary text-4xl xl:text-5xl font-medium text-black;
+    @apply font-primary text-4xl xl:text-5xl font-medium text-black dark:text-white;
   }
 
   .heading-2 {
@@ -12,11 +12,11 @@
   }
 
   .heading-3 {
-    @apply font-primary text-black text-2xl xl:text-4xl font-semibold leading-[38px];
+    @apply font-primary text-black dark:text-white text-2xl xl:text-4xl font-semibold leading-[38px];
   }
 
   .sub-heading-1 {
-    @apply font-primary text-2xl text-black;
+    @apply font-primary text-2xl text-black dark:text-white;
   }
 
   .description-1 {

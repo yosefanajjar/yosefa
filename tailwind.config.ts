@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
+  darkMode: 'class',
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -23,6 +24,7 @@ const config: Config = {
       'blue-light': '#8BE8E5',
       'green-light': '#D5FFE4',
       black: '#000000',
+      'black-dark': '#131313',
       white: '#ffffff',
       purple: '#3f3cbb',
       midnight: '#121063',

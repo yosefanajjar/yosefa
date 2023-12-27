@@ -29,11 +29,11 @@ export const PostCard = ({ title, imagePath, tagsList, description, variant = 'v
                 </ImageFrame>
             </div>
             <div className="flex flex-col w-full text-center lg:text-left">
-                <p className="heading-3 mt-8">{title}</p>
+                <p className={`heading-3 mt-8 ${variant === 'vertical' ? 'dark:text-black' : ''}`}>{title}</p>
                 <div className="mt-2 flex justify-center lg:self-start">
-                    {tagsList.slice(0, 3).map(tag => <Tag key={tag} variant="outlined" className="first:md:ml-0">{tag}</Tag>)}
+                    {tagsList.slice(0, 3).map(tag => <Tag key={tag} variant="outlined" className={`first:md:ml-0 ${variant === 'horizontal' ? 'dark:border-white text-black dark:text-white' : ''}`}>{tag}</Tag>)}
                 </div>
-                <p className="description-1 mt-3 pl-3 md:pl-0 ">{description}</p>
+                <p className={`description-1 mt-3 pl-3 md:pl-0 ${variant === 'horizontal' ? 'dark:text-white' : ''}`}>{description}</p>
                 <div className={`${variant === 'vertical' ? 'w-full self-center' : 'w-full md:w-auto md:self-end'} `}>
                     <Button variant={variant === 'vertical' ? 'secondary' : 'primary'} className="mt-6" fullWidth={variant === 'vertical'} href={`/blog/${slug}`}>
                         {'Read Post ->'}

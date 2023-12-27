@@ -37,7 +37,7 @@ export default function Home() {
             </div> */}
           </div>
         </div>
-        <div className="w-full mt-10 xl:mt-0 lg:w-3/6 xl:w-5/12 bg-purple-light rounded-[5px] border-4 border-black py-6 px-3 xl:p-10">
+        <div className="w-full mt-10 xl:mt-0 lg:w-3/6 xl:w-5/12 bg-purple-light rounded-[5px] border-4 border-black dark:border-white py-6 px-3 xl:p-10">
           <h2 className="heading-2">🛠️ What am I doing?</h2>
           <div className="flex flex-wrap items-center">
             {tagsList.map(tag => (<Tag variant="filled" key={tag}>{tag}</Tag>))}

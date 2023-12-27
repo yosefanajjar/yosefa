@@ -1,24 +1,37 @@
-"use client"
+'use client'
 
-import { useState } from 'react'
 import { Switch as HeadlessSwitch } from '@headlessui/react'
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 export const Switch = () => {
-  const [enabled, setEnabled] = useState(false)
-
+  const { theme, setTheme, resolvedTheme } = useTheme();
   return (
-    <div>
+    <div className='flex justify-center items-center'>
       <HeadlessSwitch
-        checked={enabled}
-        onChange={setEnabled}
-        className={`bg-black-light
-          relative inline-flex h-[38px] w-[74px] shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75`}
+        checked={resolvedTheme === 'dark'}
+        onChange={() => setTheme(theme === 'light' ? 'dark' : 'light')}
+        className={`bg-black dark:bg-white
+          relative h-10 w-24 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white/75 flex justify-around items-center`}
       >
-        <span className="sr-only">Use setting</span>
+        <Image
+          src="/sun.svg"
+          alt="sun"
+          width={24}
+          height={24}
+          className="inline-flex dark:hidden"
+        />
         <span
           aria-hidden="true"
-          className={`${enabled ? 'translate-x-9' : 'translate-x-0'}
-            pointer-events-none inline-block h-[34px] w-[34px] transform rounded-full bg-white-light shadow-lg ring-0 transition duration-200 ease-in-out`}
+          className={`
+                pointer-events-none inline-flex h-6 w-6 transform rounded-full light:bg-black bg-white dark:bg-black shadow-lg ring-0 transition-all duration-200 ease-in-out`}
+        />
+        <Image
+          src="/moon.svg"
+          alt="moon"
+          width={24}
+          height={24}
+          className="dark:inline-flex hidden"
         />
       </HeadlessSwitch>
     </div>

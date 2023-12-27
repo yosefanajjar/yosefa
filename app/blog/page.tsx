@@ -5,7 +5,7 @@ import { Metadata } from 'next/types';
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://yosefa.dev'),
-    title: 'The blog',
+    title: 'Blog',
     description: 'My blog where I share updates and posts I write where I keep your in the loop of what goes in my life and the tech world from my window',
     openGraph: {
         images: '/meta-image.webp'
@@ -23,7 +23,7 @@ export default function Blog() {
             </h1>
             <section className='mt-10 flex flex-col space-y-10'>
                 {blog.map(blog => (
-                    <div key={blog.meta.title} className="py-14 px-6 lg:px-10 xl:px-20 border-4 border-black bg-white">
+                    <div key={blog.meta.title} className="py-14 px-6 lg:px-10 xl:px-20 border-4 border-black dark:border-white bg-white dark:bg-black">
                         <PostCard
                             key={blog.meta.title}
                             title={blog.meta.title}
