@@ -1,6 +1,6 @@
 export const experiencesList = [
   {
-    jobTitle: 'Full Stack Engineer',
+    jobTitle: 'Full Stack Engineer II',
     companyName: 'Theodo',
     dates: 'Feb 2023 - Present',
   },

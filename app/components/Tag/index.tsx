@@ -7,7 +7,7 @@ interface TagProps {
 
 export const Tag = ({ children, variant, size = 'regular', className }: TagProps) => {
     const variantClasses = variant === 'outlined' ? ' bg-transparent' : 'bg-white';
-    const sizeClasses = size === 'large' ? 'w-full h-[100px] rounded-2xl border-4' : 'min-w-[77px] h-[26px] mt-4 ml-4 rounded-[5px] border border-black'
+    const sizeClasses = size === 'large' ? 'w-full h-[100px] rounded-2xl border-4' : 'w-auto h-[26px] mt-4 ml-4 rounded-[5px] border border-black px-5'
 
     return (
         <div className={`${sizeClasses} ${variantClasses}  md:px-5 flex items-center justify-center relative ${className}`}>

@@ -1,0 +1,337 @@
+---
+title: Building A Discord Bot With Interactions
+date: 2023-12-30
+description:
+  In this post I’ll walk you through how I built my discord bot, this should
+  give you a jump start into building your own bot and build on top of it to add
+  more functionality if you’d like.
+imagePath: /images/building-a-discord-bot-with-interactions/hero.webp
+tags: Node, TypeScript, Discord, Bot, Back-End
+---
+
+In this post I’ll walk you through how I built my discord bot, this should give
+you a jump start into building your own bot and build on top of it to add more
+functionality if you’d like. Here is the link to the Github repo of the
+[project](https://github.com/yosefanajjar/wise-man-bot) as you may prefer to
+follow the full code while reading this post.
+
+To get started we’ll need to create a discord app in the
+[discord developer portal](https://discord.com/developers/applications). The bot
+I built listens to commands or interactions and responds with a random quote, I
+called it WiseMan. When you create the bot in the portal, you’ll need to keep
+these two values to authenticate requests from the discord API to your bot
+
+![Application in discord protal](/images/building-a-discord-bot-with-interactions/application-in-discord-portal.png)
+
+Now we’ll need to build the app, you can choose the backend technology you are
+most comfortable with for this one I’ll use ExpressJS for our bot’s API and
+we’ll use TypeScript because I love types!
+
+### Creating the project
+
+If you have project already running or know how to create a starter project with
+Express and TypeScript then you can skip this step
+
+Let’s initialise the project by creating a new folder and initialise an npm
+package
+
+```jsx
+mdkir wise-man-bot && cd wise-man-bot && pnpm init -y
+```
+
+Next up we’ll need to install express and dotenv (for accessing our env
+variables)
+
+```jsx
+pnpm express dotenv
+```
+
+Now let’s add typescript to the project
+
+```jsx
+pnpm i -D typescript @types/express @types/node
+```
+
+We’ll need to generate tsconfig file as well
+
+```jsx
+npx tsc --init
+```
+
+In the tsconfig specify a dist folder as our output for the typescript complier
+
+```jsx
+{
+  "compilerOptions": {
+    ...
+    "outDir": "./dist"
+    ...
+  }
+}
+```
+
+### The project structure
+
+Let’s define the project files structure, create the following `src` folder with
+these files/
+
+```jsx
+/src
+- commands.ts // Used for keeping the slash commands and registering them
+- index.ts // The main file which will serve the endpoints of our server
+- utils.ts // Used for the discord util functions
+```
+
+In **commnds.ts** we’ll add our slash commands, the slash command consists of a
+name and description of the command, there are other properties and options that
+you can specify but for simplicity we’ll just define it with a name and
+description
+
+```tsx
+const GET_QUOTE_COMMAND: Command = {
+  name: 'quote',
+  description: 'Get a random quote from the wise man',
+}
+```
+
+We defined our first slash command to get the a quote from the bot, I’m using
+custom types for now but if you want more official types from discord that are
+currently in progress check out **discord-api-types**
+
+Next up we’ll need to register our slash command and to do that we’ll need to
+make a call to the discord API so let’s write down the function that will do
+discord requests
+
+```tsx
+// utils.ts
+export const DiscordRequest = async (
+  endpoint: string,
+  options: DiscordRequestOptions,
+): Promise<globalThis.Response> => {
+  // append endpoint to root API URL
+  const url = 'https://discord.com/api/v10/' + endpoint
+  // Use node-fetch to make requests
+  const res = await fetch(url, {
+    headers: {
+      Authorization: `Bot ${process.env.DISCORD_TOKEN}`,
+      'Content-Type': 'application/json; charset=UTF-8',
+      'User-Agent':
+        'WiseManBot (https://github.com/yosefanajjar/wise-man-bot, 1.0.0)',
+    },
+    ...options,
+  })
+  // throw API errors
+  if (!res.ok) {
+    const data = await res.json()
+    console.log(res.status)
+    throw new Error(JSON.stringify(data))
+  }
+  // return original response
+  return res
+}
+```
+
+The function above will take a discord api endpoint and the options which will
+contain the api call method and the body containing the data we want to send I’m
+using node fetch as per the example in the discord docs but you can use
+something else like axios I don’t think that should be a problem.
+
+Notice for interacting with the discord api we’ll need your discord app’s token
+which you can get the value for from the developer portal, copy the token and
+add it to your .env
+
+![Bot Token Generation](/images/building-a-discord-bot-with-interactions/bot-token.png)
+
+Your .env file should look something like this
+
+```tsx
+APP_ID=
+DISCORD_TOKEN=
+PUBLIC_KEY=
+```
+
+I’ve added the function below to make the API call to register/install the slash
+commands, now we can call this function in our commands.ts file
+
+```tsx
+// utils.ts
+export const InstallGlobalCommands = async (
+  appId: string | undefined,
+  commands: Command[],
+): Promise<void> => {
+  // API endpoint to overwrite global commands
+  const endpoint = `applications/${appId}/commands`
+
+  try {
+    // This is calling the bulk overwrite endpoint: https://discord.com/developers/docs/interactions/application-commands#bulk-overwrite-global-application-commands
+    await DiscordRequest(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(commands), // Stringify payloads
+    })
+  } catch (err) {
+    console.error(err)
+  }
+}
+```
+
+```tsx
+// commands.ts
+import 'dotenv/config'
+import { InstallGlobalCommands } from './utils.js'
+import { type Command } from './types/index.js'
+
+const GET_QUOTE_COMMAND: Command = {
+  name: 'quote',
+  description: 'Get a random quote from the wise man',
+}
+
+export const ALL_COMMANDS: Command[] = [GET_QUOTE_COMMAND]
+
+void (async () => {
+  await InstallGlobalCommands(process.env.APP_ID, ALL_COMMANDS)
+})()
+```
+
+To run this command let’s add a register script to our package.json to run this
+file. I’m using tsx to run the typscripts file in real time, it’s a modern
+version of ts-node
+
+```tsx
+// package.json
+"scripts": {
+	"register": "tsx src/commands.ts",
+	...
+}
+```
+
+Now that we’ve got our command register it’s time to write the endpoint that
+will receive the interaction from the discord api and respond to it. But before
+adding the endpoint we need to make sure that we verify the requests are coming
+from the discord api and for that we’ll use the
+**[discord-interactions](https://github.com/discord/discord-interactions-js)**
+package for verification and to handle signature headers
+
+```tsx
+// utils.ts
+export function VerifyDiscordRequest(clientKey: string) {
+  return function (req: Request, res: Response, buf: Buffer, encoding: string) {
+    const signature = req.get('X-Signature-Ed25519') as Signature
+    const timestamp = req.get('X-Signature-Timestamp') as Signature
+
+    const isValidRequest = verifyKey(buf, signature, timestamp, clientKey)
+    if (!isValidRequest) {
+      res.status(401).send('Bad request signature')
+      throw new Error('Bad request signature')
+    }
+  }
+}
+```
+
+The function above uses the verifyKey function from discord-interactions to
+verify the api request, we’ll use this function in a middleware that will run
+before every request. It’s important to place this middleware before any body
+parsing that you do with packages like body-parser because we want to pass the
+function above the raw body
+
+```tsx
+// Parse request body and verifies incoming requests using discord-interactions package
+app.use(express.json({ verify: VerifyDiscordRequest(process.env.PUBLIC_KEY) }))
+```
+
+After adding the middleware we can define the interactions endpoint that discord
+will send requests to, the endpoint must be prepared to acknowledge
+a `PING` message and handle the slash commands you’ve registered
+
+```tsx
+app.post(
+  '/interactions',
+  async (req, res): Promise<InteractionsApiResponse | void> => {
+    // Interaction type and data
+    const { type, data } = req.body
+
+    /**
+     * Handle verification requests
+     */
+    if (type === InteractionType.PING) {
+      return res.send({ type: InteractionResponseType.PONG })
+    }
+
+    /**
+     * Handle slash command requests
+     * See https://discord.com/developers/docs/interactions/application-commands#slash-commands
+     */
+    if (type === InteractionType.APPLICATION_COMMAND) {
+      const { name } = data
+
+      if (name === 'quote') {
+        const quote = await quoteOfTheDay() // makes an api call to get random quote
+        // Send a message into the channel where command was triggered from
+        return res.send({
+          type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
+          data: {
+            content: quote,
+          },
+        })
+      }
+    }
+  },
+)
+```
+
+### Deploying your API
+
+Time to deploy the server, but before deploying let’s make sure we’ve got all
+the needed scripts in our package.json
+
+```tsx
+"scripts": {
+    "build": "npx tsc", // compiles ts code and outputs to /dist
+    "start": "node dist/index.js", // starts local server of compiled code
+    "register": "tsx src/commands.ts", // registers the slash commands
+    "dev": "nodemon - exec 'tsx' src/index.ts" // runs local dev server
+  },
+```
+
+We’ll need to deploy the app to get a url of our interactions endpoint to give
+to the discord app in the developer portal, you can deploy to test things
+quickly using a tool like **ngrock** I’ll deploy the api on R**ender** they
+provide an interface that makes it easy to deploy an API
+
+Connect Render with your Github repo and update the settings for the build and
+run commands since we’re using typescript for our project. You’ll also need to
+provide values for the environment variables we’ve added under
+the \***\*Environment\*\*** tab
+
+![Render Settings](/images/building-a-discord-bot-with-interactions/render-settings.png)
+
+Once we deploy successfully and get a URL let’s go add it to our discord bot
+
+![Discord Interactions Url](/images/building-a-discord-bot-with-interactions/discord-interactions-url.png)
+
+Save your changes and to go test the app we need to generate a url to add the
+bot to a server where we can test the commands, go to the OAuth2 tab under URL
+Generator we need to specify the permissions needed for our bot to respond to
+slash commands. Select the permissions below and add the bot to the server of
+your choice
+
+![Bot Generate URL](/images/building-a-discord-bot-with-interactions/bot-generate-url.png)
+
+After adding the bot to a server you’ll see the slash commands our bot can
+execute and running it should give us a random quote as we planned
+
+![Bot Slash Command](/images/building-a-discord-bot-with-interactions/bot-slash-command.png)
+
+![Bot Slash Command Execution](/images/building-a-discord-bot-with-interactions/bot-slash-command-execution.png)
+
+### Common Issues
+
+- You might run into issues when running the slash commands if your bot was
+  inactive for more than 30 minutes and that’s due to cold starts and the
+  discord api has a timeout so it’s likely to fail. The free plan on Render will
+  make your API go to sleep if you are not using it, the solution to that is to
+  upgrade your plan or you can use another provider like AWS
+  ![Bot Slash Command Failure](/images/building-a-discord-bot-with-interactions/bot-slash-command-failure.png)
+- Signature size error: you’ll get this error if you are not verifying the
+  discord calls correctly, make sure that your middleware is receiving the raw
+  body and test the api endpoint by executing the command in the discord app, as
+  in Postman you won’t have the correct values for the signature headers
