@@ -17,7 +17,7 @@ export const MyJourney = () => (
                 {experiencesList.map((experience, index, array) => (
                     <div className="flex flex-col xl:grid xl:grid-cols-3 xl:justify-stretch xl:items-center w-full mt-12 text-center xl:text-left" key={experience.companyName}>
                         <div className={`order-2 mt-10 xl:mt-0 ${index % 2 === 0 ? 'xl:order-1' : 'xl:order-3  justify-self-end'}`}>
-                            <p className="text-black-light text-2xl xl:text-[28px] font-medium font-secondary capitalize leading-[23px]">{experience.jobTitle}</p>
+                            <p className="text-black-light text-2xl xl:text-[26px] font-medium font-secondary capitalize leading-[23px]">{experience.jobTitle}</p>
                             <p className="text-black-light text-opacity-70 text-xl uppercase font-medium font-secondary leading-[23px] mt-3">{experience.dates}</p>
                         </div>
 
