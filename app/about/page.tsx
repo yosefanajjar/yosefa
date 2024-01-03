@@ -4,8 +4,8 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
     metadataBase: new URL('https://yosefa.dev'),
-    title: 'Yosef Alnajjar | Full Stack Engineer',
-    description: 'Personal website and blog where I share content and life updates. Join me in my journey as a curious software engineer as I share knowledge while keeping things fun',
+    title: 'About | Yosef Alnajjar',
+    description: 'Learn about me, and how I started in my career progress',
     openGraph: {
         images: '/meta-image.webp'
     }
@@ -21,6 +21,15 @@ export default function About() {
                         <Image
                             src="/images/about/me.webp"
                             alt="me setting in a coffee shop"
+                            fill
+                            sizes="100vw"
+                            className='object-cover'
+                        />
+                    </ImageFrame>
+                    <ImageFrame variant='portrait'>
+                        <Image
+                            src="/images/about/gsg-talk.webp"
+                            alt="me giving a talk at GSG"
                             fill
                             sizes="100vw"
                             className='object-cover'
@@ -60,6 +69,15 @@ export default function About() {
                         <Image
                             src="/images/about/home-office-istanbul.webp"
                             alt="my home office in Istanbul"
+                            fill
+                            sizes="100vw"
+                            className='object-cover'
+                        />
+                    </ImageFrame>
+                    <ImageFrame variant='portrait'>
+                        <Image
+                            src="/images/about/cvibe-office.webp"
+                            alt="me with my friend at the cvibe office"
                             fill
                             sizes="100vw"
                             className='object-cover'
@@ -120,7 +138,7 @@ export default function About() {
                         sizes='100vw'
                     />
                     <p>
-                        I’m still in London now, will continue to work on cool projects that improve people’s lives and looking forward for what’s ahead!
+                        I’m still living in London now, will continue to work on cool projects that improve people’s lives and looking forward for what’s ahead!
                     </p>
                     <p>
                         Thank you for reading! Feel free to drop me a message if you want to chat or ask a question. Subscribe to my newsletter to get notified when I add new blog posts
