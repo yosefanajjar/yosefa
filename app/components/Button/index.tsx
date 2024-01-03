@@ -3,7 +3,7 @@ import type { HTMLAttributeAnchorTarget } from "react";
 
 interface ButtonProps {
     children: string;
-    variant: 'primary' | 'secondary';
+    variant: 'primary' | 'secondary' | 'primary-dark';
     className?: string;
     fullWidth?: boolean;
     onClick?: () => void;
@@ -12,8 +12,9 @@ interface ButtonProps {
 }
 
 export const Button = ({ children, variant, className, fullWidth = false, onClick, href, target = '_self' }: ButtonProps) => {
-    const variantClasses = variant === 'primary' ? 'bg-purple-primary border-black dark:border-white text-white' : 'bg-white text-black';
+    const variantClasses = variant === 'primary' ? 'bg-purple-primary border-black dark:border-white text-white' : variant === 'primary-dark' ? 'bg-purple-primary border-black dark:border-black text-white' : 'bg-white text-black';
     const fullWidthClasses = fullWidth ? 'w-full' : 'w-full md:w-[250.51px]';
+    const shadowClasses = variant === 'primary' ? 'bg-black dark:bg-white' : 'bg-black dark:bg-black'
 
     return (
         <div className={`${fullWidthClasses} relative z-30 group`}>
@@ -26,7 +27,7 @@ export const Button = ({ children, variant, className, fullWidth = false, onClic
                     {children}
                 </button>
             )}
-            <div className={`w-full h-full bg-black ${variant === 'primary' ? 'dark:bg-white' : ''} absolute right-0 bottom-0 top-2 left-3 -z-10 group-hover:left-2 group-hover:top-1 group-hover:transition-all delay-50 duration-300`}></div>
+            <div className={`w-full h-full ${shadowClasses} absolute right-0 bottom-0 top-2 left-3 -z-10 group-hover:left-2 group-hover:top-1 group-hover:transition-all delay-50 duration-300`}></div>
         </div>
     )
 }

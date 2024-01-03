@@ -9,7 +9,7 @@ export const MyJourney = () => (
 
         <div className="bg-blue-light border-4 border-black dark:border-white mt-6 pb-24 relative z-20">
             <div className="flex justify-end mt-6 mr-6">
-                <Button variant="primary" href="/files/resume.pdf" target="_blank">
+                <Button variant="primary-dark" href="/files/resume.pdf" target="_blank">
                     Resume 📄
                 </Button>
             </div>

@@ -11,6 +11,7 @@ export const Footer = () => (
                 <a href="https://github.com/yosefanajjar">GitHub</a>
                 <a href="mailto:yosefanajjar@gmail.com">Email</a>
                 <Link href="/blog">Blog</Link>
+                <a href="https://yosefa.substack.com/" target="_blank">Newsletter</a>
             </div>
         </div>
     </>

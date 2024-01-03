@@ -52,10 +52,9 @@ export default function Home() {
         <MyJourney />
       </div>
 
-      {/* TODO: Add News Letter Functionality */}
-      {/* <div className="px-9 md:px-20 mt-20">
+      <div className="px-9 md:px-20 mt-20">
         <NewsLetter />
-      </div> */}
+      </div>
     </>
   )
 };
