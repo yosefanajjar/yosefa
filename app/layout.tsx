@@ -6,6 +6,7 @@ import './globals.css'
 import { Header } from '@/app/components/Header'
 import { Footer } from '@/app/components/Footer'
 import { ThemeProvider } from '@/app/components/ThemeProvider'
+import { NewsLetter } from './components/NewsLetter';
 
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
@@ -31,6 +32,9 @@ export default function RootLayout({
         <ThemeProvider attribute="class">
           <Header />
           {children}
+          <div className="px-9 md:px-20 mt-20">
+            <NewsLetter />
+          </div>
           <div className="mt-24">
             <Footer />
           </div>

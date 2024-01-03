@@ -18,7 +18,7 @@ export const Header = () => {
                 <Link className="text-5xl font-primary font-semibold" href="/">YosefA</Link>
                 <div className="hidden xl:flex space-x-8 items-center font-primary font-medium">
                     <Link href="/blog">Blog</Link>
-                    {/* <Link href="/about">About</Link>*/}
+                    <Link href="/about">About</Link>
                     <a href="https://yosefa.substack.com/" target="_blank">Newsletter</a>
                     <Link href="/files/resume.pdf" target="_blank">Resume</Link>
                     <a href="https://github.com/yosefanajjar" target="_blank">

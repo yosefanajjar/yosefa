@@ -64,7 +64,7 @@ export default function Post({ params }: any) {
                         <span className="text-black dark:text-white text-base lg:text-2xl font-medium font-primary ">Yosef Alnajjar</span>
                         <span className="text-black dark:text-white text-base lg:text-2xl font-normal font-primary "> Full Stack Engineer</span>
                     </p>
-                    <div className="flex space-x-3">
+                    <div className="flex flex-wrap space-x-3">
                         {props.frontMatter.tags.split(', ').map((tag: string) => (
                             <Tag key={tag} variant="filled" className="first:ml-0">{tag}</Tag>
                         ))}
