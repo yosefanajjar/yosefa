@@ -1,5 +1,15 @@
 import Image from 'next/image'
 import { ImageFrame } from "../components/ImageFrame";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    metadataBase: new URL('https://yosefa.dev'),
+    title: 'Yosef Alnajjar | Full Stack Engineer',
+    description: 'Personal website and blog where I share content and life updates. Join me in my journey as a curious software engineer as I share knowledge while keeping things fun',
+    openGraph: {
+        images: '/meta-image.webp'
+    }
+}
 
 export default function About() {
     const contentClasses = 'prose prose-sm md:prose-lg lg:prose-xl prose-neutral prose-headings:font-primary font-secondary dark:prose-invert';
